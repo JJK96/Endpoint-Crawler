@@ -18,4 +18,4 @@ class SpringBootCrawler(BaseCrawler):
                     request_type = match.group(1)
                     value = match.group(2)
                     path = base + value
-                    yield Endpoint(request_type, path)
+                    yield Endpoint(request_type, path, file)

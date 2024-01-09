@@ -11,12 +11,13 @@ def main(dir, base_url, framework):
     """
     Find endpoints in source code of web applications.
     """
-    writer = csv.DictWriter(sys.stdout, ["type", "url"])
+    writer = csv.DictWriter(sys.stdout, ["type", "url", "file"])
     writer.writeheader()
     for endpoint in find_endpoints(dir, framework):
         writer.writerow({
             "type": endpoint.request_type,
-            "url": base_url + endpoint.path
+            "url": base_url + endpoint.path,
+            "file": endpoint.file
         })
 
 

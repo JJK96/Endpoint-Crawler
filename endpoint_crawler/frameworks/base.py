@@ -2,9 +2,18 @@ import os
 import re
 from pathlib import Path
 from dataclasses import dataclass
+from typing import Iterator
+
+
+@dataclass
+class Endpoint:
+    request_type: str
+    path: str
+    file: str
+
 
 class BaseCrawler:
-    def find_endpoints(self, dir):
+    def find_endpoints(self, dir) -> Iterator[Endpoint]:
         raise NotImplemented()
 
     def find_relevant_files(self, dir, filetypes):
@@ -20,8 +29,3 @@ class BaseCrawler:
         for pattern in patterns:
             yield from re.finditer(pattern, contents, flags=re.MULTILINE | re.DOTALL)
 
-
-@dataclass
-class Endpoint:
-    request_type: str
-    path: str
