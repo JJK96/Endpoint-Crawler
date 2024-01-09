@@ -22,4 +22,12 @@ public class Controller {
    public Response check() {
     
    }
+
+   @GetMapping(
+      value = {"/data"},
+      produces = {"application/json"}
+   )
+   public Response data() {
+    
+   }
 }

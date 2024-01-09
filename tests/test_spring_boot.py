@@ -14,14 +14,16 @@ def endpoints(crawler):
 
 
 def test_no_duplicates(crawler, endpoints):
-    assert len(endpoints) == 2
+    assert len(endpoints) == 3
     unique_paths = set((e.path for e in endpoints))
     assert len(unique_paths) == len(endpoints)
 
 
 def test_correct_urls(crawler, endpoints):
     endpoints = list(crawler.find_endpoints_file(dir / "resources/controller.java"))
-    assert len(endpoints) == 2
+    assert len(endpoints) == 3
     paths = [e.path for e in endpoints]
     assert "rest/endpoint/request" in paths
     assert "rest/endpoint/check" in paths
+    assert "rest/endpoint/data" in paths
+

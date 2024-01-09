@@ -1,5 +1,5 @@
 from .base import BaseCrawler, Endpoint
-from urllib.parse import urljoin
+from ..util import Url
 
 class SpringBootCrawler(BaseCrawler):
     filetypes = ["java"]
@@ -10,18 +10,17 @@ class SpringBootCrawler(BaseCrawler):
     base_pattern = r"@RequestMapping\({\"([^}]+)\"}\)"
 
     def find_endpoints_file(self, file):
-        base = ""
+        base = Url("")
         done = set()
         for match in self.regex_on_file(file, [self.base_pattern]):
             if match.group(0).startswith("@RequestMapping"):
-                base = match.group(1)
-                assert base is not None
+                base = Url(match.group(1))
                 break
 
         for match in self.regex_on_file(file, self.patterns):
             request_type = match.group(1)
             value = match.group(2)
-            path = urljoin(base + '/', value)
+            path = base / value
             key = (request_type, path)
             if key not in done:
                 yield Endpoint(request_type, path, file)

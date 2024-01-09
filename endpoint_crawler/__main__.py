@@ -2,6 +2,7 @@ import click
 import csv
 import sys
 from . import find_endpoints
+from .util import Url
 
 @click.command()
 @click.option("--dir", default=".", help="Directory to search in")
@@ -16,7 +17,7 @@ def main(dir, base_url, framework):
     for endpoint in find_endpoints(dir, framework):
         writer.writerow({
             "type": endpoint.request_type,
-            "url": base_url + endpoint.path,
+            "url": Url(base_url) / endpoint.path,
             "file": endpoint.file
         })
 
