@@ -13,14 +13,13 @@ class Endpoint:
 
 
 class BaseCrawler:
-    def find_endpoints(self, dir) -> Iterator[Endpoint]:
-        raise NotImplemented()
+    filetypes = []
 
     def find_relevant_files(self, dir, filetypes):
         for root, dirs, files in os.walk(dir):
             for file in files:
                 for filetype in filetypes:
-                    if file.endswith(filetype):
+                    if file.endswith("." + filetype):
                         yield Path(root) / file
 
     def regex_on_file(self, filename, patterns):
@@ -29,3 +28,6 @@ class BaseCrawler:
         for pattern in patterns:
             yield from re.finditer(pattern, contents, flags=re.MULTILINE | re.DOTALL)
 
+    def find_endpoints(self, dir) -> Iterator[Endpoint]:
+        for file in self.find_relevant_files(dir, self.filetypes):
+            yield from self.find_endpoints_file(file)
