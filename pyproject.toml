@@ -1,0 +1,19 @@
+[project]
+name = "endpoint_crawler"
+version = "0.1"
+dependencies = [
+    "dynaconf",   # Config files
+    "pytest",     # Tests
+    "pytest-cov", # Code coverage
+    "click"       # CLI interface
+]
+authors = [
+    { name = "Jan-Jaap Korpershoek" },
+]
+description = """Find endpoints in source code of web applications."""
+readme = "README.md"
+license = {file = "LICENSE"}
+keywords = []
+
+[project.scripts]
+endpoint_crawler = "endpoint_crawler.__main__:main"

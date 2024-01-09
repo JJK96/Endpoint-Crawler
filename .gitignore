@@ -1,0 +1,5 @@
+__pycache__
+settings.toml
+.egg-info
+.DS_Store
+.coverage
