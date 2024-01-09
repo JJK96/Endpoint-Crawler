@@ -1,4 +1,4 @@
-from .base import BaseCrawler, Endpoint
+from .base import BaseCrawler, Endpoint, Parameter
 from ..util import Url
 from javalang.parse import parse
 from javalang.tree import ElementValuePair, ElementArrayValue
@@ -31,6 +31,14 @@ class SpringBootCrawler(BaseCrawler):
                                 value = annotation.element.values[0].value.strip('"')
                         if value is None:
                             continue
+                        parameters = []
+                        for parameter in method.parameters:
+                            parameter_type = []
+                            for parameter_annotation in parameter.annotations:
+                                parameter_type.append("@" + parameter_annotation.name)
+                            parameter_type.append(parameter.type.name)
+                            parameters.append(Parameter(parameter.name, " ".join(parameter_type)))
+
                         path = base / value
                         request_type = annotation.name.replace("Mapping", "")
-                        yield Endpoint(request_type, path, file)
+                        yield Endpoint(request_type, path, file, parameters)

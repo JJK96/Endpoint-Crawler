@@ -6,10 +6,20 @@ from typing import Iterator
 
 
 @dataclass
+class Parameter:
+    name: str
+    type: str
+
+    def __repr__(self):
+        return self.type + " " + self.name
+
+
+@dataclass
 class Endpoint:
     request_type: str
     path: str
     file: str
+    parameters: list[Parameter]
 
 
 class BaseCrawler:
