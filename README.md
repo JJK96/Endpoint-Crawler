@@ -14,9 +14,6 @@ or
 make install
 ```
 
-Copy `settings.example.toml` to `settings.toml` and fill the necessary values.
-You can also install a settings file in ~/.config/endpoint_crawler/settings.toml
-
 ## Usage
 
 ```
