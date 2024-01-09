@@ -11,17 +11,16 @@ def crawler():
 
 @pytest.fixture
 def endpoints(crawler):
-    return list(crawler.find_endpoints_file(dir / "resources/controller.java"))
+    return list(crawler.find_endpoints_file(dir / "resources/Controller.java"))
 
 
-def test_no_duplicates(crawler, endpoints):
+def test_no_duplicates(endpoints):
     assert len(endpoints) == num_endpoints
     unique_paths = set((e.path for e in endpoints))
     assert len(unique_paths) == len(endpoints)
 
 
-def test_correct_urls(crawler, endpoints):
-    endpoints = list(crawler.find_endpoints_file(dir / "resources/controller.java"))
+def test_correct_urls(endpoints):
     assert len(endpoints) == num_endpoints
     paths = [e.path for e in endpoints]
     assert "rest/endpoint/request" in paths

@@ -5,7 +5,8 @@ dependencies = [
     "dynaconf",   # Config files
     "pytest",     # Tests
     "pytest-cov", # Code coverage
-    "click"       # CLI interface
+    "click",      # CLI interface
+    "javalang"    # Java parsing
 ]
 authors = [
     { name = "Jan-Jaap Korpershoek" },
