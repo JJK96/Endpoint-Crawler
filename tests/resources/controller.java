@@ -30,4 +30,8 @@ public class Controller {
    public Response data() {
     
    }
+
+   @GetMapping({"create/{id:[0-9-]+}"})
+   public HttpEntity create(@PathVariable long id) throws Exception {
+   }
 }

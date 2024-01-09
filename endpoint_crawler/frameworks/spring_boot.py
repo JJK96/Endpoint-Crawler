@@ -5,7 +5,7 @@ class SpringBootCrawler(BaseCrawler):
     filetypes = ["java"]
     patterns = [
         r"@(Get|Post|Put|Delete|Patch)Mapping\([^\)]*?value\s*=\s*{\"([^\"]+)\"}[^\)]*\)",
-        r"@(Get|Post|Put|Delete|Patch)Mapping\({\"([^}]+)\"}\)",
+        r"@(Get|Post|Put|Delete|Patch)Mapping\({\"([^\"]+)\"}\)",
     ]
     base_pattern = r"@RequestMapping\({\"([^}]+)\"}\)"
 
