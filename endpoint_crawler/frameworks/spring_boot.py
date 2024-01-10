@@ -6,6 +6,27 @@ from javalang.tree import ElementValuePair, ElementArrayValue
 class SpringBootCrawler(BaseCrawler):
     filetypes = ["java"]
     mappings = ["GetMapping", "PostMapping", "PutMapping", "DeleteMapping", "PatchMapping"]
+    variable_annotations = ["RequestBody", "PathVariable", "RequestParam"]
+
+    def get_annotation_value(self, annotation):
+        if isinstance(annotation.element, list):
+            for e in annotation.element: 
+                if isinstance(e, ElementValuePair) and e.name == "value":
+                    return e.value.values[0].value.strip('"')
+        elif isinstance(annotation.element, ElementArrayValue):
+                return annotation.element.values[0].value.strip('"')
+        return None
+
+    def get_parameter_type(self, parameter):
+        parameter_type = []
+        for parameter_annotation in parameter.annotations:
+            if parameter_annotation.name not in self.variable_annotations:
+                continue
+            parameter_type.append("@" + parameter_annotation.name)
+        if not parameter_type:
+            return None
+        parameter_type.append(parameter.type.name)
+        return " ".join(parameter_type)
 
     def find_endpoints_file(self, file):
         with open(file) as f:
@@ -21,23 +42,15 @@ class SpringBootCrawler(BaseCrawler):
             for method in c.methods:
                 for annotation in method.annotations:
                     if annotation.name in self.mappings:
-                        value = None
-                        if isinstance(annotation.element, list):
-                            for e in annotation.element: 
-                                if isinstance(e, ElementValuePair) and e.name == "value":
-                                    value = e.value.values[0].value.strip('"')
-                                    break
-                        elif isinstance(annotation.element, ElementArrayValue):
-                                value = annotation.element.values[0].value.strip('"')
+                        value = self.get_annotation_value(annotation)
                         if value is None:
                             continue
                         parameters = []
                         for parameter in method.parameters:
-                            parameter_type = []
-                            for parameter_annotation in parameter.annotations:
-                                parameter_type.append("@" + parameter_annotation.name)
-                            parameter_type.append(parameter.type.name)
-                            parameters.append(Parameter(parameter.name, " ".join(parameter_type)))
+                            parameter_type = self.get_parameter_type(parameter)
+                            if not parameter_type:
+                                continue
+                            parameters.append(Parameter(parameter.name, parameter_type))
 
                         path = base / value
                         request_type = annotation.name.replace("Mapping", "")
