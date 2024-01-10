@@ -36,3 +36,6 @@ def test_parameters(endpoints):
             assert len(e.parameters) == 2
             assert str(e.parameters[0]) == "@PathVariable long id"
             assert str(e.parameters[1]) == "@RequestBody MyClass value"
+            for p in e.parameters:
+                assert "@Something" not in str(p)
+                assert "unimportant" not in str(p)
