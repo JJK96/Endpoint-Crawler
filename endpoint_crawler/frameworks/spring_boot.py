@@ -32,19 +32,15 @@ class SpringBootCrawler(BaseCrawler):
         with open(file) as f:
             tree = parse(f.read())
         for c in tree.types:
-            base = None
+            base = Url("")
             for annotation in c.annotations:
                 if annotation.name == "RequestMapping":
                     base = Url(annotation.element.values[0].value.strip('"'))
                     break
-            if not base:
-                continue
             for method in c.methods:
                 for annotation in method.annotations:
                     if annotation.name in self.mappings:
                         value = self.get_annotation_value(annotation)
-                        if value is None:
-                            continue
                         parameters = []
                         for parameter in method.parameters:
                             parameter_type = self.get_parameter_type(parameter)
@@ -52,6 +48,9 @@ class SpringBootCrawler(BaseCrawler):
                                 continue
                             parameters.append(Parameter(parameter.name, parameter_type))
 
-                        path = base / value
+                        if value is None:
+                            path = base
+                        else:
+                            path = base / value
                         request_type = annotation.name.replace("Mapping", "")
                         yield Endpoint(request_type, path, file, parameters)
